@@ -2,7 +2,7 @@
 # File Name: index.py
 # Description: Pong Game based off starter code for brick breaker game
 # Author: Ari Khan
-# Date: 11/14/2024
+# Date: 11/17/2024
 #########################################
 
 #---------------------------------------#
@@ -12,15 +12,14 @@
 import pygame
 import random
 pygame.init()
-pygame.font.init()
 
 #---------------------------------------#
 # Define Constants                      #
 #---------------------------------------#
 
 # Create the Game Window
-WIDTH = 800
-HEIGHT= 600
+WIDTH = 1080
+HEIGHT= 720
 gameWindow = pygame.display.set_mode((WIDTH,HEIGHT))
 
 # Define Edges
@@ -153,7 +152,7 @@ while running:
         pygame.display.update()
         pygame.time.delay(2)
 
-        # Draw home screen elements
+        # Handle keyboard buttons to start game
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             running = False
@@ -168,7 +167,7 @@ while running:
             positiveSpeed = 1.5
             negativeSpeed = -1.5
 
-    # Randomly Decide Ball Starting Direction
+    # Randomly decide ball starting direction
     speedX = random.choice([positiveSpeed, negativeSpeed])
     speedY = random.choice([positiveSpeed, negativeSpeed])
 
@@ -207,16 +206,15 @@ while running:
             leftPaddleShift = 3.5
             player2PowerUpUsed = True
 
-        # Handle Ball collision with paddles
-        if (leftPaddleX + leftPaddleBuffer >= ballX) and (leftPaddleY <= ballY <= leftPaddleY + leftPaddleH):
+        # Handle ball collision with paddles
+        if (leftPaddleX + leftPaddleBuffer >= ballX >= leftPaddleX) and (leftPaddleY <= ballY <= leftPaddleY + leftPaddleH):
             popSound.play(loops=0)
             speedX = positiveSpeed
-
-        elif (rightPaddleX - rightPaddleBuffer <= ballX) and (rightPaddleY <= ballY <= rightPaddleY + rightPaddleH):
+        elif (rightPaddleX - rightPaddleBuffer <= ballX <= rightPaddleX + rightPaddleBuffer) and (rightPaddleY <= ballY <= rightPaddleY + rightPaddleH):
             popSound.play(loops=0)
             speedX = negativeSpeed
 
-        # Handle Ball collision with screen borders and handle points and powerups
+        # Handle ball collision with end-zones and handle points and powerups
         if ballX >= RIGHT:
             ballX = rightPaddleBallStartX
             ballY = ballStartY
@@ -231,6 +229,8 @@ while running:
             speedY = random.choice([positiveSpeed, negativeSpeed])
             rightPaddleH = 150
             player2Points += 1
+
+        # Handle ball collision with sides and change its direction
         if ballY <= TOP or ballY >= BOTTOM:
             speedY = -speedY
 
@@ -251,12 +251,12 @@ while running:
     gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, pointsCounterY))
     gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, pointsCounterY))
     
-    # Check the winner of the match and display win messages
+    # Check the winner of the match and draw win messages
     if player1Points == 7:
         gameWindow.blit(p1WinMessage, (winMessageX, winMessageY))
     elif player2Points == 7:
         gameWindow.blit(p2WinMessage, (winMessageX, winMessageY))
-    
+
     pygame.display.update()
     pygame.time.delay(2)
 
