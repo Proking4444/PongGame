@@ -251,6 +251,7 @@ while running:
     gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, pointsCounterY))
     gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, pointsCounterY))
     
+    # Check the winner of the match and display win messages
     if player1Points == 7:
         gameWindow.blit(p1WinMessage, (winMessageX, winMessageY))
     elif player2Points == 7:
@@ -259,6 +260,7 @@ while running:
     pygame.display.update()
     pygame.time.delay(2)
 
+    # Listed for the escape key event
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
         running = False
