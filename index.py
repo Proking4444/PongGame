@@ -20,7 +20,7 @@ pygame.init()
 # Create the Game Window
 WIDTH = 1080
 HEIGHT= 720
-gameWindow = pygame.display.set_mode((WIDTH,HEIGHT))
+gameWindow = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Define Edges
 TOP = 0  
@@ -29,10 +29,10 @@ LEFT = 0
 RIGHT = WIDTH 
 
 # Define Colors
-GREEN = (0,255,0)
-DARK_BLUE = (0,0,64)
-WHITE = (255,255,255)
-BLACK = (0,0,0)
+GREEN = (0, 255, 0)
+DARK_BLUE = (0, 0, 64)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 # Define Outline Constant
 outline = 0
@@ -91,19 +91,19 @@ homeMessage1Y = HEIGHT // 2 - 100
 player1Points = 0
 player2Points = 0
 
-# Define Player 1 Power Up Variables
+# Define Player 1 Power-Up Variables
 leftPaddleShift = 2
 player1PowerUpUsed = False
 
-# Define Player 2 Power Up Variables
+# Define Player 2 Power-Up Variables
 rightPaddleH = 150
 player2PowerUpUsed = False
 
 # Define Ball Speed/Position Variables
 ballX = (WIDTH - ballR) // 2
 ballY = (HEIGHT - ballR) // 2
-speedX =  1
-speedY =  1
+speedX = 1
+speedY = 1
 positiveSpeed = 1
 negativeSpeed = -1
 
@@ -123,19 +123,21 @@ gameFinished = False
 #---------------------------------------#
 # Main Program                          #
 #---------------------------------------#
+
+# Print necessary console messages
 print("Hit ESC to end the program.")
 
-# Begin Playing Music
+# Begin playing music
 pygame.mixer.music.load("music.mp3")
 pygame.mixer.music.set_volume(0.6)
-pygame.mixer.music.play(loops = -1)
+pygame.mixer.music.play(loops=-1)
 pygame.time.delay(5)
 
 # Main game loop
 while running:
     pygame.event.clear()
 
-    # Home screen Loop
+    # Home screen loop
     while inPlay == False and gameFinished == False:
         # Clear events
         pygame.event.clear()
@@ -148,7 +150,7 @@ while running:
         gameWindow.blit(homeMessage1, (homeMessage1X, homeMessage1Y))
         gameWindow.blit(homeMessage2, (homeMessage1X - 15, homeMessage1Y + 40))
         gameWindow.blit(homeMessage3, (homeMessage1X - 25, homeMessage1Y + 100))
-        gameWindow.blit(homeMessage4, (homeMessage1X -75, homeMessage1Y + 140))
+        gameWindow.blit(homeMessage4, (homeMessage1X - 75, homeMessage1Y + 140))
         pygame.display.update()
         pygame.time.delay(2)
 
@@ -162,8 +164,8 @@ while running:
             inPlay = True
         if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
             inPlay = True
-            speedX =  1.5
-            speedY =  1.5
+            speedX = 1.5
+            speedY = 1.5
             positiveSpeed = 1.5
             negativeSpeed = -1.5
 
@@ -260,10 +262,10 @@ while running:
     pygame.display.update()
     pygame.time.delay(2)
 
-    # Listed for the escape key event
+    # Listen for the escape key event
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
         running = False
 
-#-----------#
+# End the game
 pygame.quit()
