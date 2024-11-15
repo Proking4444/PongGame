@@ -23,13 +23,14 @@ WIDTH = 800
 HEIGHT= 600
 gameWindow = pygame.display.set_mode((WIDTH,HEIGHT))
 
-# Define Colors
+# Define Edges
 TOP = 0  
 BOTTOM = HEIGHT
 LEFT = 0     
 RIGHT = WIDTH 
+
+# Define Colors
 GREEN = (0,255,0)
-BLUE  = (0,0,128)
 DARK_BLUE = (0,0,64)
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -38,22 +39,23 @@ BLACK = (0,0,0)
 outline = 0
 
 # Define Font Constant
-font = pygame.font.SysFont("OCR-A Extended", 25)
+fontSize = 25
+font = pygame.font.SysFont("OCR-A Extended", fontSize)
 
 # Define Ball Constants
 ballR = 25
 leftPaddleBallStartX = (WIDTH - ballR) // 2 - 300
 rightPaddleBallStartX = (WIDTH - ballR) // 2 + 300
-leftPaddleBallStartY = (HEIGHT - ballR) // 2
-rightPaddleBallStartY = (HEIGHT - ballR) // 2
+ballStartY = (HEIGHT - ballR) // 2
+
+# Define Common Paddle Constant
+paddleW = 20
 
 # Define Left Paddle Constants
-leftPaddleW = 20
 leftPaddleH = 150
 leftPaddleBuffer = 40
 
 # Define Right Paddle Constants
-rightPaddleW  = 20
 rightPaddleShift = 2
 rightPaddleBuffer = 20
 
@@ -62,10 +64,9 @@ centerLineThickness = 5
 centerLineX = WIDTH // 2
 
 # Define Player Points Counter Constants
-player1PointsCounterX = WIDTH // 2 - 40
-player1PointsCounterY = TOP + 20
-player2PointsCounterX = WIDTH // 2 + 27
-player2PointsCounterY = TOP + 20
+player1PointsCounterX = WIDTH // 2 - 50
+player2PointsCounterX = WIDTH // 2 + 30
+pointsCounterY = TOP + 20
 p1WinMessage = font.render("Player 1 Wins!", 1, WHITE)
 p2WinMessage = font.render("Player 2 Wins!", 1, WHITE)
 winMessageX = WIDTH // 2 - 95
@@ -108,16 +109,17 @@ positiveSpeed = 1
 negativeSpeed = -1
 
 # Define Left Paddle Position Variables
-leftPaddleX = LEFT - leftPaddleW // 2
+leftPaddleX = LEFT - paddleW // 2
 leftPaddleY = (BOTTOM - leftPaddleH) // 2
 
 # Define Right Paddle Position Variables
-rightPaddleX = WIDTH - rightPaddleW // 2
+rightPaddleX = WIDTH - paddleW // 2
 rightPaddleY = (BOTTOM - rightPaddleH) // 2
 
 # Initiate Game Starting Variables
+running = True
 inPlay = False
-running = False
+gameFinished = False
 
 #---------------------------------------#
 # Main Program                          #
@@ -130,54 +132,57 @@ pygame.mixer.music.set_volume(0.6)
 pygame.mixer.music.play(loops = -1)
 pygame.time.delay(5)
 
-# Home screen Loop
-while running == False:
-     # Clear events
+# Main game loop
+while running:
     pygame.event.clear()
 
-    # Draw home screen elements
-    gameWindow.fill(BLACK)
-    pygame.draw.line(gameWindow, DARK_BLUE, (centerLineX, TOP), (centerLineX, BOTTOM), centerLineThickness)
-    pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH), outline)
-    pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH), outline)
-    gameWindow.blit(homeMessage1, (homeMessage1X, homeMessage1Y))
-    gameWindow.blit(homeMessage2, (homeMessage1X - 15, homeMessage1Y + 40))
-    gameWindow.blit(homeMessage3, (homeMessage1X - 25, homeMessage1Y + 100))
-    gameWindow.blit(homeMessage4, (homeMessage1X -75, homeMessage1Y + 140))
+    # Home screen Loop
+    while inPlay == False and gameFinished == False:
+        # Clear events
+        pygame.event.clear()
 
-    pygame.display.update()
-    pygame.time.delay(2)
+        # Draw home screen elements
+        gameWindow.fill(BLACK)
+        pygame.draw.line(gameWindow, DARK_BLUE, (centerLineX, TOP), (centerLineX, BOTTOM), centerLineThickness)
+        pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, paddleW, rightPaddleH), outline)
+        pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, paddleW, leftPaddleH), outline)
+        gameWindow.blit(homeMessage1, (homeMessage1X, homeMessage1Y))
+        gameWindow.blit(homeMessage2, (homeMessage1X - 15, homeMessage1Y + 40))
+        gameWindow.blit(homeMessage3, (homeMessage1X - 25, homeMessage1Y + 100))
+        gameWindow.blit(homeMessage4, (homeMessage1X -75, homeMessage1Y + 140))
+        pygame.display.update()
+        pygame.time.delay(2)
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_SPACE]:
-            running = True
+        # Draw home screen elements
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            running = False
+            inPlay = False
+            gameFinished = True
+        if keys[pygame.K_SPACE]:
             inPlay = True
-    if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-            running = True
+        if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
             inPlay = True
             speedX =  1.5
             speedY =  1.5
             positiveSpeed = 1.5
             negativeSpeed = -1.5
 
-# Randomly Decide Ball Starting Direction
-speedX = random.choice([positiveSpeed, negativeSpeed])
-speedY = random.choice([positiveSpeed, negativeSpeed])
+    # Randomly Decide Ball Starting Direction
+    speedX = random.choice([positiveSpeed, negativeSpeed])
+    speedY = random.choice([positiveSpeed, negativeSpeed])
 
-# Main game loop
-while running:
-    pygame.event.clear()
     while inPlay:
         # Clear events
         pygame.event.clear()
         
         # Draw game elements
         gameWindow.fill(BLACK)
-        gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, player1PointsCounterY))
-        gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, player2PointsCounterY))
+        gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, pointsCounterY))
+        gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, pointsCounterY))
         pygame.draw.line(gameWindow, DARK_BLUE, (centerLineX, TOP), (centerLineX, BOTTOM), centerLineThickness)
-        pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH), outline)
-        pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH), outline)
+        pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, paddleW, rightPaddleH), outline)
+        pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, paddleW, leftPaddleH), outline)
         pygame.draw.circle(gameWindow, WHITE, (ballX, ballY), ballR, outline)
         pygame.display.update()
         pygame.time.delay(2)
@@ -214,14 +219,14 @@ while running:
         # Handle Ball collision with screen borders and handle points and powerups
         if ballX >= RIGHT:
             ballX = rightPaddleBallStartX
-            ballY = rightPaddleBallStartY
+            ballY = ballStartY
             speedX = negativeSpeed
             speedY = random.choice([positiveSpeed, negativeSpeed])
             leftPaddleShift = 2
             player1Points += 1
         elif ballX <= LEFT:
             ballX = leftPaddleBallStartX
-            ballY = leftPaddleBallStartY
+            ballY = ballStartY
             speedX = positiveSpeed
             speedY = random.choice([positiveSpeed, negativeSpeed])
             rightPaddleH = 150
@@ -236,15 +241,15 @@ while running:
         # Check for win condition
         if player1Points == 7 or player2Points == 7:
             inPlay = False
+            gameFinished = True
 
     # Display end game screen
     gameWindow.fill(BLACK)
     pygame.draw.line(gameWindow, DARK_BLUE, (centerLineX, TOP), (centerLineX, BOTTOM), centerLineThickness)
-    pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH), outline)
-    pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH), outline)
-    gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, player1PointsCounterY))
-    gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, player2PointsCounterY))
-    
+    pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, paddleW, rightPaddleH), outline)
+    pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, paddleW, leftPaddleH), outline)
+    gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, pointsCounterY))
+    gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, pointsCounterY))
     
     if player1Points == 7:
         gameWindow.blit(p1WinMessage, (winMessageX, winMessageY))
