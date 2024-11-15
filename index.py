@@ -18,8 +18,8 @@ pygame.init()
 #---------------------------------------#
 
 # Create the Game Window
-WIDTH = 1080
-HEIGHT= 720
+WIDTH = 800
+HEIGHT= 600
 gameWindow = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Define Edges
@@ -66,10 +66,13 @@ centerLineX = WIDTH // 2
 player1PointsCounterX = WIDTH // 2 - 50
 player2PointsCounterX = WIDTH // 2 + 30
 pointsCounterY = TOP + 20
+
+# Define End Screen Message Constants
 p1WinMessage = font.render("Player 1 Wins!", 1, WHITE)
 p2WinMessage = font.render("Player 2 Wins!", 1, WHITE)
+creditsMessage = font.render("Thank you for playing!", 1, WHITE)
 winMessageX = WIDTH // 2 - 95
-winMessageY = HEIGHT // 2 - 20
+winMessageY = HEIGHT // 2 - 50
 
 # Define SFX Constants
 popSound = pygame.mixer.Sound("blip.wav")
@@ -80,8 +83,11 @@ homeMessage1 = font.render("Welcome to Pong!", 1, WHITE)
 homeMessage2 = font.render("Created by Ari Khan.", 1, WHITE)
 homeMessage3 = font.render("Press SPACE to Play.", 1, WHITE)
 homeMessage4 = font.render("Press SHIFT for 1.5x Speed.", 1, WHITE)
-homeMessage1X = WIDTH // 2 - 125
+homeMessage1X = WIDTH // 2 - 110
 homeMessage1Y = HEIGHT // 2 - 100
+
+# Define Program Delay Time Constant
+programDelayTime = 2
 
 #---------------------------------------#
 # Define Variables                      #
@@ -131,7 +137,7 @@ print("Hit ESC to end the program.")
 pygame.mixer.music.load("music.mp3")
 pygame.mixer.music.set_volume(0.6)
 pygame.mixer.music.play(loops=-1)
-pygame.time.delay(5)
+pygame.time.delay(programDelayTime)
 
 # Main game loop
 while running:
@@ -148,11 +154,13 @@ while running:
         pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, paddleW, rightPaddleH), outline)
         pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, paddleW, leftPaddleH), outline)
         gameWindow.blit(homeMessage1, (homeMessage1X, homeMessage1Y))
-        gameWindow.blit(homeMessage2, (homeMessage1X - 15, homeMessage1Y + 40))
-        gameWindow.blit(homeMessage3, (homeMessage1X - 25, homeMessage1Y + 100))
-        gameWindow.blit(homeMessage4, (homeMessage1X - 75, homeMessage1Y + 140))
+        gameWindow.blit(homeMessage2, (homeMessage1X - 30, homeMessage1Y + 40))
+        gameWindow.blit(homeMessage3, (homeMessage1X - 30, homeMessage1Y + 100))
+        gameWindow.blit(homeMessage4, (homeMessage1X - 80, homeMessage1Y + 140))
+
+        # Update the display and load elements
         pygame.display.update()
-        pygame.time.delay(2)
+        pygame.time.delay(programDelayTime)
 
         # Handle keyboard buttons to start game
         keys = pygame.key.get_pressed()
@@ -168,10 +176,10 @@ while running:
             speedY = 1.5
             positiveSpeed = 1.5
             negativeSpeed = -1.5
-
-    # Randomly decide ball starting direction
-    speedX = random.choice([positiveSpeed, negativeSpeed])
-    speedY = random.choice([positiveSpeed, negativeSpeed])
+    
+        # Randomly decide ball starting direction
+        speedX = random.choice([positiveSpeed, negativeSpeed])
+        speedY = random.choice([positiveSpeed, negativeSpeed])
 
     while inPlay:
         # Clear events
@@ -185,8 +193,10 @@ while running:
         pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, paddleW, rightPaddleH), outline)
         pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, paddleW, leftPaddleH), outline)
         pygame.draw.circle(gameWindow, WHITE, (ballX, ballY), ballR, outline)
+
+        # Update the display and load elements
         pygame.display.update()
-        pygame.time.delay(2)
+        pygame.time.delay(programDelayTime)
 
         # Handle paddle movement and power-up buttons
         keys = pygame.key.get_pressed()
@@ -252,6 +262,7 @@ while running:
     pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, paddleW, leftPaddleH), outline)
     gameWindow.blit(font.render(str(player1Points), True, WHITE), (player1PointsCounterX, pointsCounterY))
     gameWindow.blit(font.render(str(player2Points), True, WHITE), (player2PointsCounterX, pointsCounterY))
+    gameWindow.blit(creditsMessage, (winMessageX - 65, winMessageY + 40))
     
     # Check the winner of the match and draw win messages
     if player1Points == 7:
@@ -259,8 +270,9 @@ while running:
     elif player2Points == 7:
         gameWindow.blit(p2WinMessage, (winMessageX, winMessageY))
 
+    # Update the display and load elements
     pygame.display.update()
-    pygame.time.delay(2)
+    pygame.time.delay(programDelayTime)
 
     # Listen for the escape key event
     keys = pygame.key.get_pressed()
