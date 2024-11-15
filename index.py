@@ -168,16 +168,15 @@ while running:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             running = False
-            inPlay = False
             gameFinished = True
         if keys[pygame.K_SPACE]:
             inPlay = True
         if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
-            inPlay = True
             speedX = 1.5
             speedY = 1.5
             positiveSpeed = 1.5
             negativeSpeed = -1.5
+            inPlay = True
     
         # Randomly decide ball starting direction
         speedX = random.choice([positiveSpeed, negativeSpeed])
@@ -217,7 +216,7 @@ while running:
             rightPaddleH = 250
             player2PowerUpUsed = True
         if keys[pygame.K_e] and player1PowerUpUsed == False:
-            leftPaddleShift = 3.5
+            leftPaddleShift = 3
             player2PowerUpUsed = True
 
         # Handle ball collision with paddles
