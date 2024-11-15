@@ -80,8 +80,8 @@ homeMessage1 = font.render("Welcome to Pong!", 1, WHITE)
 homeMessage2 = font.render("Created by Ari Khan.", 1, WHITE)
 homeMessage3 = font.render("Press SPACE to Play.", 1, WHITE)
 homeMessage4 = font.render("Press SHIFT for 1.5x Speed.", 1, WHITE)
-homeMessage1X = WIDTH // 2
-homeMessage1Y = HEIGHT // 2
+homeMessage1X = WIDTH // 2 - 125
+homeMessage1Y = HEIGHT // 2 - 100
 
 #---------------------------------------#
 # Define Variables                      #
@@ -141,9 +141,9 @@ while running == False:
     pygame.draw.rect(gameWindow, GREEN, (rightPaddleX, rightPaddleY, rightPaddleW, rightPaddleH), outline)
     pygame.draw.rect(gameWindow, GREEN, (leftPaddleX, leftPaddleY, leftPaddleW, leftPaddleH), outline)
     gameWindow.blit(homeMessage1, (homeMessage1X, homeMessage1Y))
-    gameWindow.blit(homeMessage2, (homeMessage1X, homeMessage1Y + 30))
-    gameWindow.blit(homeMessage3, (homeMessage1X, homeMessage1Y + 70))
-    gameWindow.blit(homeMessage4, (homeMessage1X, homeMessage1Y + 100))
+    gameWindow.blit(homeMessage2, (homeMessage1X - 15, homeMessage1Y + 40))
+    gameWindow.blit(homeMessage3, (homeMessage1X - 25, homeMessage1Y + 100))
+    gameWindow.blit(homeMessage4, (homeMessage1X -75, homeMessage1Y + 140))
 
     pygame.display.update()
     pygame.time.delay(2)
@@ -199,7 +199,7 @@ while running:
             rightPaddleH = 250
             player2PowerUpUsed = True
         if keys[pygame.K_e] and player1PowerUpUsed == False:
-            leftPaddleShift = 3
+            leftPaddleShift = 3.5
             player2PowerUpUsed = True
 
         # Handle Ball collision with paddles
