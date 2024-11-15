@@ -75,8 +75,10 @@ winMessageX = WIDTH // 2 - 95
 winMessageY = HEIGHT // 2 - 50
 
 # Define SFX Constants
-popSound = pygame.mixer.Sound("blip.wav")
-popSound.set_volume(1)
+paddleSound = pygame.mixer.Sound("blip.wav")
+paddleSound.set_volume(1)
+scoreSound = pygame.mixer.Sound("score.wav")
+scoreSound.set_volume(0.75)
 
 # Define Home Screen Constants
 homeMessage1 = font.render("Welcome to Pong!", 1, WHITE)
@@ -220,14 +222,15 @@ while running:
 
         # Handle ball collision with paddles
         if (leftPaddleX + leftPaddleBuffer >= ballX >= leftPaddleX) and (leftPaddleY <= ballY <= leftPaddleY + leftPaddleH):
-            popSound.play(loops=0)
+            paddleSound.play(loops=0)
             speedX = positiveSpeed
         elif (rightPaddleX - rightPaddleBuffer <= ballX <= rightPaddleX + rightPaddleBuffer) and (rightPaddleY <= ballY <= rightPaddleY + rightPaddleH):
-            popSound.play(loops=0)
+            paddleSound.play(loops=0)
             speedX = negativeSpeed
 
         # Handle ball collision with end-zones and handle points and powerups
         if ballX >= RIGHT:
+            scoreSound.play(loops=0)
             ballX = rightPaddleBallStartX
             ballY = ballStartY
             speedX = negativeSpeed
@@ -235,6 +238,7 @@ while running:
             leftPaddleShift = 2
             player1Points += 1
         elif ballX <= LEFT:
+            scoreSound.play(loops=0)
             ballX = leftPaddleBallStartX
             ballY = ballStartY
             speedX = positiveSpeed
